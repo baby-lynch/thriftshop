@@ -65,7 +65,7 @@ export default {
           // } else {
           //   console.log(res)
           // }
-          const { data: res } = await this.$http.post('login', this.loginForm)
+          const { data: res } = await this.$http.post('/login', this.loginForm)
           if (res) {
             this.$message.success('登陆成功！')
             return this.$router.push('/shop')
