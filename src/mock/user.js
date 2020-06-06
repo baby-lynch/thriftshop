@@ -4,7 +4,7 @@ const users = [{
   password: 'ykl123'
 }, {
   id: 2,
-  username: '日生水原！',
+  username: '日生水原',
   password: 'rssy123'
 }, {
   id: 3,

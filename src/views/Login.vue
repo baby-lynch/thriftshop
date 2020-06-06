@@ -35,7 +35,7 @@ export default {
   data () {
     return {
       loginForm: {
-        username: '',
+        username: 'SWN',
         password: ''
       },
       loginFormRules: {
@@ -52,7 +52,18 @@ export default {
     resetLoginForm () {
       this.$refs.loginFormRef.resetFields()
     },
+    clearCookie () {
+      var date = new Date()
+      date.setTime(date.getTime())
+      var keys = document.cookie.match(/[^ =;]+(?=)/g)
+      if (keys) {
+        for (var i = keys.length; i--;) {
+          document.cookie = keys[i] + '=0; expires=' + date.toGMTString() + '; path=/'
+        }
+      }
+    },
     login () {
+      this.clearCookie()
       this.$refs.loginFormRef.validate(async valid => {
         if (!valid) {
           this.$message.error('用户名或密码不能为空！')
@@ -66,7 +77,8 @@ export default {
           //   console.log(res)
           // }
           const { data: res } = await this.$http.post('/login', this.loginForm)
-          if (res) {
+          if (res.valid) {
+            document.cookie = res.reqUser.username + '=' + res.reqUser.id
             this.$message.success('登陆成功！')
             return this.$router.push('/shop')
           } else {

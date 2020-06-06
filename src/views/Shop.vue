@@ -4,8 +4,8 @@
         <el-row :gutter="20">
         <el-col :span="8">
           <div class="logo">
-            <router-link :to="{ path:'/shop'}" >
-            <img src="../assets/images/logo.png" :class="{ active: isActive}" @click="isActive=true" @mouseleave="isActive=false">
+            <router-link :to="{ name: 'shop'}" >
+            <img src="../assets/images/logo.png">
             </router-link>
             </div>
         </el-col>
@@ -18,8 +18,8 @@
         </el-col>
         <el-col :span="4">
           <div class="account">
-            <router-link :to="{ path:'/login'}">
-            <i class="el-icon-s-custom">
+            <router-link :to="{ name: 'shop'}">
+            <i class="el-icon-s-custom" @click="getUser">
               <div style="display:inline-block; font-size:15px">个人中心</div>
             </i>
             </router-link>
@@ -27,25 +27,25 @@
         </el-col>
         </el-row>
       </div>
-      <el-tabs type="border-card">
+      <el-tabs type="border-card" class="goods-panel">
         <el-tabs v-model="activeCate" type="card" @tab-click="handleClick">
           <el-tab-pane label="全部"></el-tab-pane>
           <el-tab-pane v-for="category in categories" :key="category.id" :label="category.name"></el-tab-pane>
         </el-tabs>
         <div class="item-box" v-for="item in showGoods" :key="item.id" @mouseover="isHover=item.id" @mouseout="isHover=-1" :class="{hover: item.id === isHover}">
           <div class="thumbnail">
-            <img :src="images[item.id-1].imgURL" alt="..." style="width: 200px; height: 200px">
+            <img :src="item.image" alt="..." style="width: 180px; height: 180px">
           </div>
           <div>
             <div class="item-name">
-              <div style="text-align:center;display:inline-block"><p class="item-name-display">{{ item.name }}</p></div>
+              <div style="text-align:center;display:inline-block"><p class="item-name-display;font-family:'等线(中文正文)'">{{ item.name }}</p></div>
             </div>
             <div class="bottom-footer">
               <div class="sellerinfo">
                 <el-avatar class="seller-avtr" :size="25" icon="el-icon-user-solid"></el-avatar>
                 <div class="seller-name" ><span>{{ item.seller.username}}</span></div>
               </div>
-              <div class="detail-btn"><el-button type="text">商品详情</el-button></div>
+              <div class="detail-btn"><router-link :to="{ name: 'item', query: {itemID :item.id} }" ><el-button type="text">商品详情</el-button></router-link></div>
             </div>
           </div>
         </div>
@@ -75,17 +75,7 @@ export default {
         name: '文体数码'
       }],
       goods: [],
-      showGoods: [],
-      images: [
-        { imgURL: require('../static/goods/1.jpg') },
-        { imgURL: require('../static/goods/2.jpg') },
-        { imgURL: require('../static/goods/3.jpg') },
-        { imgURL: require('../static/goods/4.jpg') },
-        { imgURL: require('../static/goods/5.jpg') },
-        { imgURL: require('../static/goods/6.jpg') },
-        { imgURL: require('../static/goods/7.jpg') },
-        { imgURL: require('../static/goods/8.jpg') }
-      ]
+      showGoods: []
     }
   },
   methods: {
@@ -106,21 +96,20 @@ export default {
     },
     search () {
       this.showGoods = []
-      console.log(this.searchInput)
       for (let i = 0; i < this.goods.length; i++) {
-        console.log((this.goods[i].name).search(this.searchInput))
         if ((this.goods[i].name).search(this.searchInput) > 0) {
           this.showGoods.push(this.goods[i])
         }
       }
+    },
+    getUser () {
+      const saveUserInfo = document.cookie
+      console.log(saveUserInfo)
     }
   },
   created: function () {
     this.getGoods()
   }
-  // console.log(this.activeCate)
-  // req = Number(this.activeCate) + 1
-  // this.goods = await this.$http('get', req)
 }
 </script>
 
@@ -142,9 +131,6 @@ export default {
 .el-col {
   border-radius: 4px;
   height: 100%;
-}
-.active{
-    border:1px solid black;
 }
 .search{
   height: 100%;
@@ -172,7 +158,7 @@ export default {
   width: 300px;
   border-radius: 10px;
   padding-top: 10px;
-  background-color:rgb(255, 255, 255);
+  background-color:rgb(245,245,245);
   box-shadow: 1px 1px 3px #888888;
   text-align: center;
 }
