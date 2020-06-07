@@ -11,7 +11,7 @@
         </el-col>
         <el-col :span="12">
           <div class="search" >
-            <el-input v-model="searchInput" placeholder="请输入内容">
+            <el-input v-model="searchInput" placeholder="请输入内容" @keydown.enter.native="search">
               <el-button slot="append" type="primary" icon="el-icon-search" @click="search">搜索</el-button>
             </el-input>
             </div>
@@ -19,7 +19,7 @@
         <el-col :span="4">
           <div class="account">
             <router-link :to="{ name: 'shop'}">
-            <i class="el-icon-s-custom" @click="getUser">
+            <i class="el-icon-s-custom">
               <div style="display:inline-block; font-size:15px">个人中心</div>
             </i>
             </router-link>
@@ -37,8 +37,9 @@
             <img :src="item.image" alt="..." style="width: 180px; height: 180px">
           </div>
           <div>
-            <div class="item-name">
-              <div style="text-align:center;display:inline-block"><p class="item-name-display;font-family:'等线(中文正文)'">{{ item.name }}</p></div>
+            <div>
+              <div style="color:rgb(212,77,68);font-size:20px">￥{{item.price}}</div>
+              <div style="text-align:center;display:inline-block"><p style="font-size:15px;font-family:'Helvetica';font-weight:bold">{{ item.name }}</p></div>
             </div>
             <div class="bottom-footer">
               <div class="sellerinfo">
@@ -57,10 +58,12 @@
 export default {
   data () {
     return {
-      isActive: false,
+      /* 控制商品项目悬浮效果 */
       isHover: -1,
       searchInput: '',
+      /* 绑定输入框内容 */
       activeCate: '0',
+      /* 绑定商品类型 */
       categories: [{
         id: 1,
         name: '闲置课本'
@@ -74,8 +77,12 @@ export default {
         id: 4,
         name: '文体数码'
       }],
+      /* 存放从后端取到的所有商品数据 */
       goods: [],
-      showGoods: []
+      /* 存放要显示到商品页面上的数据 */
+      showGoods: [],
+      /* 通过从Cookie获取当前登录用户的信息，进入个人中心时利用这个ID从后端获取用户的Profile */
+      userID: 0
     }
   },
   methods: {
@@ -101,10 +108,6 @@ export default {
           this.showGoods.push(this.goods[i])
         }
       }
-    },
-    getUser () {
-      const saveUserInfo = document.cookie
-      console.log(saveUserInfo)
     }
   },
   created: function () {
@@ -171,11 +174,6 @@ export default {
   width:200px;
   border-radius: 10px;
   background-color: red;
-}
-.item-name{
-  height: 50px;
-  width: 100%;
-  font-family: Arial, Helvetica, sans-serif;
 }
 .item-name-display{
   max-width: 200px;

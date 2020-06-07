@@ -38,7 +38,7 @@
             <el-table-column prop="signer" label="收件人" width="200"></el-table-column>
             <el-table-column prop="mobile" label="联系方式" width="250"></el-table-column>
             <el-table-column prop="location" label="收货地址" width="500"></el-table-column>
-            <el-table-column label="操作" width="124">
+            <el-table-column label="操作" width="112">
               <template slot-scope="scope">
                 <el-button @click="handleClick(scope.row)" type="text" size="20">选择</el-button>
               </template>
@@ -46,6 +46,35 @@
           </el-table>
         </el-collapse-item>
       </el-collapse>
+      <el-card>
+        <table class="table table-bordered">
+          <thead>
+            <th>商品图片</th>
+            <th>商品名称</th>
+            <th>商品价格</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="thumbnail"><img :src="itemInfo.image" alt="..." style="width: 100px; height: 100px"></div></td>
+              <td>{{itemInfo.name}}</td>
+              <td>￥{{itemInfo.price}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="order-form-wrapper">
+        <el-form ref="orderFormRef" :rules="orderFormRules" :model="orderForm" label-width="80px">
+           <el-form-item label="联系方式" prop="contact">
+             <el-input v-model="orderForm.contact" placeholder="必填项，方便卖家与您联系"></el-input>
+           </el-form-item>
+          <el-form-item label="留言：">
+            <el-input type="textarea" v-model="orderForm.message"></el-input>
+          </el-form-item>
+        </el-form>
+        </div>
+        <div class="submit-btn-wrapper">
+           <el-button type="success" @click="submitOrder">提交订单</el-button>
+        </div>
+      </el-card>
     </div>
 </template>
 
@@ -53,38 +82,78 @@
 export default {
   data () {
     return {
-      purchaseID: this.$route.query.purchaseID,
-      purchaseInfo: {},
-      addressInfo: [{
-        owner: {
-          id: 1,
-          username: '余快乐！'
-        },
-        signer: '余快',
-        location: '安徽省合肥市蜀山区九龙路118号安徽大学',
-        mobile: '0551-0001'
-      }],
+      /* queryinfo是需要提交给后台的参数
+        包括通过从Cookie中获取的当前登录用户的userID，用来获取用户的地址
+        以及从路由获取的当前购买商品的purchaseItemID,用来当前购买的商品
+      */
+      queryInfo: {
+        userID: 0,
+        purchaseItemID: this.$route.query.purchaseID
+      },
+      /* 通过userID获取到的用户地址信息存放在addresInfo这个数组里 */
+      addressInfo: [],
+      /* 通过purchaseItem获取到的当前购买商品的信息存放在itemInfo这个对象里 */
+      itemInfo: {},
+      /* 控制折叠面板的打开或关闭，刚开始默认关闭 */
       activeName: '-1',
+      /* 控制折叠面版的标题显示添加地址还是被选择的地址信息 */
       ifAddressSelected: false,
-      selectedAddress: {}
+      /* 存放用户选中的地址信息 */
+      selectedAddress: {},
+      selectedAddressID: 0,
+      orderForm: {
+        contact: '',
+        message: ''
+      },
+      orderFormRules: {
+        contact: [
+          { required: true, message: '请填写联系方式', trigger: 'blur' }
+        ]
+      },
+      submitOrderInfo: {
+        buyerID: 0,
+        goodsID: Number(this.$route.query.purchaseID),
+        addressID: this.selectedAddressID,
+        contact: '',
+        message: ''
+      }
     }
   },
   methods: {
     getUser () {
+      const userID = Number(document.cookie.match(/\d+/g))
+      this.queryInfo.userID = userID
+      this.submitOrderInfo.buyerID = userID
     },
-    getPurchaseItem () {
-      console.log(this.purchaseID)
+    async getQueryInfo () {
+      const { data: res } = await this.$http.post('/purchase', this.queryInfo)
+      this.addressInfo = res.addressInfo
+      this.itemInfo = res.itemInfo
     },
     handleClick (rowInfo) {
-      // console.log(rowInfo.signer)
       this.ifAddressSelected = true
       this.activeName = '-1'
       this.selectedAddress = rowInfo
-      console.log(this.selectedAddress)
+      this.submitOrderInfo.addressID = this.selectedAddress.id
+    },
+    submitOrder () {
+      this.$refs.orderFormRef.validate(async (valid) => {
+        if (valid && this.ifAddressSelected) {
+          this.$message.success('订单创建成功')
+          this.submitOrderInfo.contact = this.orderForm.contact
+          this.submitOrderInfo.message = this.orderForm.message
+          // console.log(this.submitOrderInfo)
+          const { data: res } = await this.$http.post('/checkout', this.submitOrderInfo)
+          this.$router.push('/checkout')
+        } else if (valid) {
+          this.$message.error('请选择收货地')
+        }
+      })
     }
   },
   created: function () {
-    this.getPurchaseItem()
+    this.getUser()
+    this.getQueryInfo()
   }
 }
 </script>
@@ -127,5 +196,25 @@ export default {
 .address-panel-after{
   font-size: 18px;
   font-weight: 300
+}
+.el-card{
+  background-color: rgb(250, 250, 250);
+}
+.table{
+  text-align: center;
+  border: 1px;
+  vertical-align: center;
+}
+.table th tr td{
+  border: 1px;
+  text-align: center;
+}
+.order-form-wrapper{
+  display: inline-block;
+  width: 500px;
+}
+.submit-btn-wrapper{
+  display: inline-block;
+  margin-left: 50px;
 }
 </style>

@@ -14,7 +14,7 @@
         <el-col class="el-col" :span="4">
           <div class="account">
             <router-link :to="{ name: 'shop'}">
-            <i class="el-icon-s-custom" @click="getUser">
+            <i class="el-icon-s-custom">
               <div style="display:inline-block; font-size:15px">个人中心</div>
             </i>
             </router-link>
@@ -33,20 +33,24 @@
           <hr>
           <span style="font-family:'等线(中文正文)'">{{itemInfo.brief}}</span>
           <hr>
-            <span style="font-family:'等线(中文正文)'"><i style="font-size:20px" class="el-icon-user-solid"></i> {{ itemInfo.seller}}</span>
+            <span style="font-family:'等线(中文正文)'"><i style="font-size:20px" class="el-icon-user-solid"></i></span>
             <span style="color:rgb(157,157,157); font-family:'等线(中文正文)'; float:right"> 浏览量 {{itemInfo.click}}</span>
-            <hr>
+            <br><br>
             <div style="margin-bottom:20px;">
               <span style="color:rgb(102,102,102); font-family:'等线(中文正文)'">剩余数量： </span>
               <span>{{itemInfo.amount}}</span>
             </div>
-            <div>
+            <div style="margin-bottom:20px;">
               <span style="color:rgb(102,102,102); font-family:'等线(中文正文)'">交易方式： </span>
-              <span v-if="itemInfo.transaction === 0">当面交易</span>
-              <span v-else>快递 邮费 ￥{{itemInfo.postage}}</span>
+              <span v-if="itemInfo.transaction === 0" style="font-size:15px;"><i class="el-icon-chat-dot-round"></i> 当面交易</span>
+              <span v-else style="font-size:15px;"><i class="el-icon-message"></i> 快递</span>
             </div>
+            <div>
+              <span style="color:rgb(102,102,102); font-family:'等线(中文正文)'">运费： </span>
+              <span> ￥{{itemInfo.postage}}</span>
+              </div>
             <router-link :to="{ name: 'purchase', query: {purchaseID :itemInfo.id} }" >
-              <el-button type="primary" icon="el-icon-shopping-cart-2">立即购买</el-button>
+              <el-button type="warning" icon="el-icon-shopping-cart-2">立即购买</el-button>
             </router-link>
         </div>
       </el-card>
@@ -64,14 +68,7 @@ export default {
   methods: {
     async getItem () {
       const { data: res } = await this.$http.post('/item', this.itemID)
-      // console.log('response: \n' + JSON.parse(JSON.stringify(res)))
       this.itemInfo = JSON.parse(JSON.stringify(res))
-      // console.log(this.itemInfo.seller.id)
-      // console.log(document.cookie)
-    },
-    getUser () {
-      // const saveUserInfo = document.cookie
-      // console.log(saveUserInfo)
     }
   },
   created: function () {
@@ -110,9 +107,7 @@ export default {
   font-size:25px;
 }
 .image{
-  position: relative;
   display: inline-block;
-  margin-top:10px;
   margin-left: 30px;
   margin-right: 30px;
   vertical-align: top;
@@ -125,7 +120,7 @@ export default {
 }
 .el-button{
   position: fixed;
-  top:600px;
+  top:620px;
   width: 450px;
 }
 </style>

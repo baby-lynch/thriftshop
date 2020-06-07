@@ -4,6 +4,7 @@ import Login from '../views/Login.vue'
 import Shop from '../views/Shop.vue'
 import Item from '../views/Item.vue'
 import Purchase from '../views/Purchase.vue'
+import Checkout from '../views/Checkout.vue'
 
 Vue.use(VueRouter)
 
@@ -38,6 +39,11 @@ const routes = [
     path: '/purchase',
     name: 'purchase',
     component: Purchase
+  },
+  {
+    path: '/checkout',
+    name: 'checkout',
+    component: Checkout
   }
 ]
 const router = new VueRouter({

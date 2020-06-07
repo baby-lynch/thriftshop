@@ -15,8 +15,7 @@ const goods = [{
   image: 'https://i.loli.net/2020/06/04/MrgTJZw318HtdSK.jpg',
   amount: 1,
   transaction: 0,
-  postage: 0.0,
-  contact: '0551-0001'
+  postage: 0.0
 }, {
   id: 2,
   category: {
@@ -34,8 +33,7 @@ const goods = [{
   image: 'https://i.loli.net/2020/06/04/RFGQtPz2A1b8uDw.jpg',
   amount: 1,
   transaction: 1,
-  postage: 10.0,
-  contact: '0551-0002'
+  postage: 10.0
 }, {
   id: 3,
   category: {
@@ -53,8 +51,7 @@ const goods = [{
   image: 'https://i.loli.net/2020/06/04/4AwQC3LGjMFV5uJ.jpg',
   amount: 1,
   transaction: 1,
-  postage: 10.0,
-  contact: '0551-0002'
+  postage: 10.0
 }, {
   id: 4,
   category: {
@@ -72,8 +69,7 @@ const goods = [{
   image: 'https://i.loli.net/2020/06/04/Zz53JvbHFRXjOI7.jpg',
   amount: 1,
   transaction: 0,
-  postage: 0.0,
-  contact: '0551-0003'
+  postage: 0.0
 }, {
   id: 5,
   category: {
@@ -91,8 +87,7 @@ const goods = [{
   image: 'https://i.loli.net/2020/06/04/Emj5KugqQw6SziM.jpg',
   amount: 1,
   transaction: 1,
-  postage: 0.0,
-  contact: '0551-0004'
+  postage: 0.0
 }, {
   id: 6,
   category: {
@@ -110,8 +105,7 @@ const goods = [{
   image: 'https://i.loli.net/2020/06/04/upPdv9GcxhMNE2J.jpg',
   amount: 1,
   transaction: 0,
-  postage: 0.0,
-  contact: '0551-0005'
+  postage: 0.0
 }, {
   id: 7,
   category: {
@@ -129,8 +123,7 @@ const goods = [{
   image: 'https://i.loli.net/2020/06/04/YN7wRUC8e1fGdDv.jpg',
   amount: 1,
   transaction: 0,
-  postage: 0.0,
-  contact: '0551-0006'
+  postage: 0.0
 }, {
   id: 8,
   category: {
@@ -148,8 +141,7 @@ const goods = [{
   image: 'https://i.loli.net/2020/06/04/EAm9FyLgo6MRHQu.jpg',
   amount: 1,
   transaction: 0,
-  postage: 0.0,
-  contact: '0551-0007'
+  postage: 0.0
 }]
 
 export default goods

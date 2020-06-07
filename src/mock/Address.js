@@ -1,4 +1,5 @@
 const address = [{
+  id: 1,
   owner: {
     id: 1,
     username: '余快乐！'
@@ -7,6 +8,7 @@ const address = [{
   location: '安徽省合肥市蜀山区九龙路118号安徽大学',
   mobile: '0551-0001'
 }, {
+  id: 2,
   owner: {
     id: 1,
     username: '余快乐！'
@@ -15,6 +17,7 @@ const address = [{
   location: '安徽省蚌埠市曹山路962号安徽财经大学',
   mobile: '0552-0001'
 }, {
+  id: 3,
   owner: {
     id: 7,
     username: 'SWN'
@@ -23,6 +26,7 @@ const address = [{
   location: '安徽省合肥市蜀山区九龙路118号安徽大学',
   mobile: '0551-0007'
 }, {
+  id: 4,
   owner: {
     id: 7,
     username: 'SWN'
