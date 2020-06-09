@@ -21,7 +21,7 @@
             <el-button class="login-btn" type="primary" @click="login">登录</el-button>
           </el-form-item>
           <div class="register-panel">
-            <div class="register-question">没有账号？  请点击    <a href="#">立即注册</a> </div>
+            <div class="register-question">没有账号？ 请点击 <router-link :to="{path:'/register'}"><a>立即注册</a></router-link> </div>
           </div>
         </el-form>
       </div>

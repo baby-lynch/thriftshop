@@ -23,7 +23,7 @@
         </el-row>
       </div>
       <el-divider></el-divider>
-      <el-card>
+      <el-card id='card'>
         <div class="image">
             <img :src="itemInfo.image" alt="..." style="width: 500px; height: 500px; border-radius:8px ; vertical-align: center;">
         </div>
@@ -33,7 +33,7 @@
           <hr>
           <span style="font-family:'等线(中文正文)'">{{itemInfo.brief}}</span>
           <hr>
-            <span style="font-family:'等线(中文正文)'"><i style="font-size:20px" class="el-icon-user-solid"></i></span>
+            <span style="font-family:'等线(中文正文)'"><i style="font-size:20px" class="el-icon-user-solid"></i> {{itemInfo.seller}}</span>
             <span style="color:rgb(157,157,157); font-family:'等线(中文正文)'; float:right"> 浏览量 {{itemInfo.click}}</span>
             <br><br>
             <div style="margin-bottom:20px;">
@@ -43,7 +43,7 @@
             <div style="margin-bottom:20px;">
               <span style="color:rgb(102,102,102); font-family:'等线(中文正文)'">交易方式： </span>
               <span v-if="itemInfo.transaction === 0" style="font-size:15px;"><i class="el-icon-chat-dot-round"></i> 当面交易</span>
-              <span v-else style="font-size:15px;"><i class="el-icon-message"></i> 快递</span>
+              <span v-else style="font-size:15px;"><i class="el-icon-box"></i> 快递</span>
             </div>
             <div>
               <span style="color:rgb(102,102,102); font-family:'等线(中文正文)'">运费： </span>
@@ -67,17 +67,29 @@ export default {
   },
   methods: {
     async getItem () {
-      const { data: res } = await this.$http.post('/item', this.itemID)
-      this.itemInfo = JSON.parse(JSON.stringify(res))
+      const { data: res } = await this.$http.get('http://jp-tyo-dvm.sakurafrp.com:35923/api/GoodsDetail/', {
+        params: {
+          itemID: this.itemID
+        }
+      })
+      // console.log(res)
+      this.itemInfo = res[0]
+      document.getElementById('card').style.display = 'block'
     }
   },
   created: function () {
     this.getItem()
+  },
+  mounted () {
+    document.getElementById('card').style.display = 'none'
   }
 }
 </script>
 
 <style scoped>
+[v-cloak]{
+  display: none;
+}
 .item-container{
     margin:auto;
     height: 100%;

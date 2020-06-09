@@ -6,8 +6,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.js'
 import axios from 'axios'
+import './assets/css/base.css'
 Vue.prototype.$http = axios
-axios.defaults.baseURL = 'localhost:8080/#'
+axios.defaults.baseURL = 'localhost:8080/#/'
 Vue.prototype.$message = ElementUI.Message
 
 Vue.config.productionTip = false

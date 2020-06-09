@@ -21,17 +21,16 @@ Mock.mock('localhost:8080/#/login', 'post', (req, res) => {
   return res
 })
 
-Mock.mock('localhost:8080/#/shop', 'get', () => {
-  return goods
-})
+// Mock.mock('localhost:8080/#/shop', 'get', () => {
+//   return goods
+// })
 
-Mock.mock('localhost:8080/#/item', 'post', (req, res) => {
-  const index = JSON.parse(req.body) - 1
-  goods[index].click = goods[index].click + 1
-  res = goods[index]
-  return res
-})
-
+// Mock.mock('localhost:8080/#/item', 'post', (req, res) => {
+//   const index = JSON.parse(req.body) - 1
+//   goods[index].click = goods[index].click + 1
+//   res = goods[index]
+//   return res
+// })
 Mock.mock('localhost:8080/#/purchase', 'post', (req, res) => {
   // console.log(JSON.parse(req.body))
   const userID = JSON.parse(req.body).userID
