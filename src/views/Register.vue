@@ -16,11 +16,11 @@
            <el-form-item prop="checkPass">
              <el-input prefix-icon="el-icon-key" placeholder="确认密码" v-model="registerForm.checkPass" type="password" autocomplete="off" show-password></el-input>
            </el-form-item>
-           <el-form-item prop="email">
-             <el-input prefix-icon="el-icon-message" placeholder="邮箱" v-model="registerForm.email"></el-input>
+           <el-form-item prop="phone">
+             <el-input prefix-icon="el-icon-phone" placeholder="电话" v-model="registerForm.phone"></el-input>
            </el-form-item>
            <el-form-item>
-             <el-button class="register-btn" type="primary">立即注册</el-button>
+             <el-button class="register-btn" type="primary" @click="submitRegisterInfo">立即注册</el-button>
             </el-form-item>
             <el-form-item>
               <router-link :to="{ name: 'login'}" ><el-button type="text">返回登录</el-button></router-link>
@@ -58,9 +58,9 @@ export default {
         callback()
       }
     }
-    var checkEmail = (rule, value, callback) => {
+    var checkPhone = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('邮箱不能为空'))
+        return callback(new Error('电话不能为空'))
       }
     }
     return {
@@ -68,7 +68,7 @@ export default {
         username: '',
         pass: '',
         checkPass: '',
-        email: ''
+        phone: ''
       },
       registerFormRules: {
         username: [
@@ -80,10 +80,27 @@ export default {
         checkPass: [
           { validator: validatePass2, trigger: 'blur' }
         ],
-        email: [
-          { validator: checkEmail, trigger: 'blur' }
+        phone: [
+          { validator: checkPhone, trigger: 'blur' }
         ]
       }
+      // registerInfo: {
+      //   username: this.registerForm,
+      //   password: this.registerForm.checkPass,
+      //   phone: this.registerForm.phone
+      // }
+    }
+  },
+  methods: {
+    async submitRegisterInfo () {
+      const { data: res } = await this.$http.post('UserCreate/', {
+        username: this.registerForm.username,
+        password: this.registerForm.checkPass,
+        mobile: this.registerForm.phone
+      })
+      this.$message.success('注册成功！')
+      return this.$router.push('/login')
+      // console.log(res)
     }
   }
 }

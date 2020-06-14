@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     async getGoods () {
-      const { data: res } = await this.$http.get('http://jp-tyo-dvm.sakurafrp.com:35923/api/GoodsByCategory/')
+      const { data: res } = await this.$http.get('/GoodsByCategory')
       this.goods = res
       this.showGoods = this.goods
     },
@@ -102,7 +102,7 @@ export default {
       }
     },
     async search () {
-      const { data: res } = await this.$http.get('http://jp-tyo-dvm.sakurafrp.com:35923/api/GoodsSelect/', {
+      const { data: res } = await this.$http.get('http://jp-tyo-dvm.sakurafrp.com:65096/api/GoodsSelect/', {
         params: {
           keyword: this.searchInput
         }

@@ -8,7 +8,7 @@ import 'bootstrap/dist/js/bootstrap.js'
 import axios from 'axios'
 import './assets/css/base.css'
 Vue.prototype.$http = axios
-axios.defaults.baseURL = 'localhost:8080/#/'
+axios.defaults.baseURL = 'http://jp-tyo-dvm.sakurafrp.com:65096/api/'
 Vue.prototype.$message = ElementUI.Message
 
 Vue.config.productionTip = false

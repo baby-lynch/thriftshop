@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     async getItem () {
-      const { data: res } = await this.$http.get('http://jp-tyo-dvm.sakurafrp.com:35923/api/GoodsDetail/', {
+      const { data: res } = await this.$http.get('/GoodsDetail', {
         params: {
           itemID: this.itemID
         }

@@ -47,7 +47,7 @@
         </el-collapse-item>
       </el-collapse>
       <el-card>
-        <table class="table table-bordered">
+        <table class="table table-bordered" id="table">
           <thead>
             <th>商品图片</th>
             <th>商品名称</th>
@@ -55,7 +55,7 @@
           </thead>
           <tbody>
             <tr>
-              <td><div class="thumbnail"><img :src="itemInfo.image" alt="..." style="width: 100px; height: 100px"></div></td>
+              <td><div class="thumbnail"><img :src="itemInfo.image" style="width: 100px; height: 100px"></div></td>
               <td>{{itemInfo.name}}</td>
               <td>￥{{itemInfo.price}}</td>
             </tr>
@@ -82,14 +82,12 @@
 export default {
   data () {
     return {
-      /* queryinfo是需要提交给后台的参数
-        包括通过从Cookie中获取的当前登录用户的userID，用来获取用户的地址
-        以及从路由获取的当前购买商品的purchaseItemID,用来当前购买的商品
+      /*
+        从Cookie中获取的当前登录用户的userID，用来获取用户的地址
+        从路由获取的当前购买商品的purchaseItemID,用来获取当前购买的商品
       */
-      queryInfo: {
-        userID: 0,
-        purchaseItemID: this.$route.query.purchaseID
-      },
+      userID: 0,
+      purchaseItemID: this.$route.query.purchaseID,
       /* 通过userID获取到的用户地址信息存放在addresInfo这个数组里 */
       addressInfo: [],
       /* 通过purchaseItem获取到的当前购买商品的信息存放在itemInfo这个对象里 */
@@ -122,19 +120,31 @@ export default {
   methods: {
     getUser () {
       const userID = Number(document.cookie.match(/\d+/g))
-      this.queryInfo.userID = userID
+      this.userID = userID
       this.submitOrderInfo.buyerID = userID
     },
-    async getQueryInfo () {
-      const { data: res } = await this.$http.post('/purchase', this.queryInfo)
-      this.addressInfo = res.addressInfo
-      this.itemInfo = res.itemInfo
+    async getPurchaseItem () {
+      const { data: res } = await this.$http.get('/GoodsDetail', {
+        params: {
+          itemID: this.purchaseItemID
+        }
+      })
+      this.itemInfo = res[0]
+    },
+    async getAddress () {
+      const { data: res } = await this.$http.get('/AddressList', {
+        params: {
+          userID: this.userID
+        }
+      })
+      this.addressInfo = res
     },
     handleClick (rowInfo) {
       this.ifAddressSelected = true
       this.activeName = '-1'
       this.selectedAddress = rowInfo
       this.submitOrderInfo.addressID = this.selectedAddress.id
+      // console.log(this.submitOrderInfo.addressID)
     },
     submitOrder () {
       this.$refs.orderFormRef.validate(async (valid) => {
@@ -142,9 +152,15 @@ export default {
           this.$message.success('订单创建成功')
           this.submitOrderInfo.contact = this.orderForm.contact
           this.submitOrderInfo.message = this.orderForm.message
-          // console.log(this.submitOrderInfo)
-          const { data: res } = await this.$http.post('/checkout', this.submitOrderInfo)
           this.$router.push('/checkout')
+          console.log(this.submitOrderInfo)
+          const { data: res } = await this.$http.post('OrderCreate/', {
+            buyer: this.submitOrderInfo.buyerID,
+            goods: this.submitOrderInfo.goodsID,
+            address: this.submitOrderInfo.addressID,
+            contact: this.submitOrderInfo.contact,
+            message: this.submitOrderInfo.message
+          })
         } else if (valid) {
           this.$message.error('请选择收货地')
         }
@@ -153,7 +169,8 @@ export default {
   },
   created: function () {
     this.getUser()
-    this.getQueryInfo()
+    this.getPurchaseItem()
+    this.getAddress()
   }
 }
 </script>

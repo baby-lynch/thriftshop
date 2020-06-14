@@ -76,9 +76,15 @@ export default {
           // } else {
           //   console.log(res)
           // }
-          const { data: res } = await this.$http.post('/login', this.loginForm)
-          if (res.valid) {
-            document.cookie = res.reqUser.username + '=' + res.reqUser.id
+          const { data: res } = await this.$http.get('/LoginInfo', {
+            params: {
+              username: this.loginForm.username,
+              password: this.loginForm.password
+            }
+          })
+          console.log(res)
+          if (res.username === this.loginForm.username) {
+            document.cookie = res.username + '=' + res.id
             this.$message.success('登陆成功！')
             return this.$router.push('/shop')
           } else {
