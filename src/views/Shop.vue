@@ -12,7 +12,7 @@
         <el-col :span="12">
           <div class="search" >
             <el-input v-model="searchInput" placeholder="请输入内容" @keydown.enter.native="search">
-              <el-button slot="append" type="primary" icon="el-icon-search" @click="search">搜索</el-button>
+              <el-button slot="append" icon="el-icon-search" @click="search">搜索</el-button>
             </el-input>
             </div>
         </el-col>
@@ -39,7 +39,9 @@
           <div>
             <div>
               <div style="color:rgb(212,77,68);font-size:20px">￥{{item.price}}</div>
-              <div style="text-align:center;display:inline-block"><p style="font-size:15px;font-family:'Helvetica';font-weight:bold">{{ item.name }}</p></div>
+              <div style="text-align:center;display:inline-block">
+                <p style="font-size:15px;font-family:'Helvetica';font-weight:bold">{{ item.name }}</p>
+              </div>
             </div>
             <div class="bottom-footer">
               <div class="sellerinfo">
@@ -102,17 +104,14 @@ export default {
       }
     },
     async search () {
-      const { data: res } = await this.$http.get('http://jp-tyo-dvm.sakurafrp.com:65096/api/GoodsSelect/', {
-        params: {
-          keyword: this.searchInput
-        }
-      })
-      this.showGoods = res
-      // for (let i = 0; i < this.goods.length; i++) {
-      //   if ((this.goods[i].name).search(this.searchInput) > 0) {
-      //     this.showGoods.push(this.goods[i])
-      //   }
-      // }
+      if (this.searchInput !== '') {
+        const { data: res } = await this.$http.get('/GoodsSelect', {
+          params: {
+            keyword: this.searchInput
+          }
+        })
+        this.showGoods = res
+      }
     }
   },
   created: function () {

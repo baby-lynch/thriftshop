@@ -13,7 +13,7 @@ Vue.prototype.$message = ElementUI.Message
 
 Vue.config.productionTip = false
 
-require('./mock/index.js')
+// require('./mock/index.js')
 
 Vue.use(ElementUI)
 

@@ -33,7 +33,7 @@
           <hr>
           <span style="font-family:'等线(中文正文)'">{{itemInfo.brief}}</span>
           <hr>
-            <span style="font-family:'等线(中文正文)'"><i style="font-size:20px" class="el-icon-user-solid"></i> {{itemInfo.seller}}</span>
+            <span style="font-family:'等线(中文正文)'"><i style="font-size:20px" class="el-icon-user-solid"></i> {{itemInfo.seller.username}}</span>
             <span style="color:rgb(157,157,157); font-family:'等线(中文正文)'; float:right"> 浏览量 {{itemInfo.click}}</span>
             <br><br>
             <div style="margin-bottom:20px;">

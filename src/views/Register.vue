@@ -84,23 +84,23 @@ export default {
           { validator: checkPhone, trigger: 'blur' }
         ]
       }
-      // registerInfo: {
-      //   username: this.registerForm,
-      //   password: this.registerForm.checkPass,
-      //   phone: this.registerForm.phone
-      // }
     }
   },
   methods: {
-    async submitRegisterInfo () {
-      const { data: res } = await this.$http.post('UserCreate/', {
-        username: this.registerForm.username,
-        password: this.registerForm.checkPass,
-        mobile: this.registerForm.phone
+    submitRegisterInfo () {
+      this.$refs.registerFormRef.validate(async valid => {
+        if (!valid) {
+          this.$message.error('请完善注册信息！')
+        } else {
+          const { data: res } = await this.$http.post('UserCreate/', {
+            username: this.registerForm.username,
+            password: this.registerForm.checkPass,
+            mobile: this.registerForm.phone
+          })
+          this.$message.success('注册成功！')
+          return this.$router.push('/login')
+        }
       })
-      this.$message.success('注册成功！')
-      return this.$router.push('/login')
-      // console.log(res)
     }
   }
 }

@@ -17,8 +17,7 @@
           </el-form-item>
           <!--按钮-->
           <el-form-item>
-            <el-button class="reset-btn" type="info" @click="resetLoginForm">重置</el-button>
-            <el-button class="login-btn" type="primary" @click="login">登录</el-button>
+            <el-button class="login-btn" type="primary" @click="login">登 录</el-button>
           </el-form-item>
           <div class="register-panel">
             <div class="register-question">没有账号？ 请点击 <router-link :to="{path:'/register'}"><a>立即注册</a></router-link> </div>
@@ -49,9 +48,6 @@ export default {
     }
   },
   methods: {
-    resetLoginForm () {
-      this.$refs.loginFormRef.resetFields()
-    },
     clearCookie () {
       var date = new Date()
       date.setTime(date.getTime())
@@ -68,14 +64,6 @@ export default {
         if (!valid) {
           this.$message.error('用户名或密码不能为空！')
         } else {
-          // const { data: res } = await this.$http.post('login', this.loginForm)
-          // if (res.meta.status !== 200) {
-          // return this.$message.error('用户名或密码错误！')
-          // this.$message.success('登陆成功！')
-          // return this.$router.push('/shop')
-          // } else {
-          //   console.log(res)
-          // }
           const { data: res } = await this.$http.get('/LoginInfo', {
             params: {
               username: this.loginForm.username,
@@ -135,10 +123,7 @@ export default {
   padding-right: 40px;
 }
 .login-btn{
-  float:right;
-}
-.reset-btn{
-  float:left;
+  width:100%;
 }
 .register-panel{
   float: right;
