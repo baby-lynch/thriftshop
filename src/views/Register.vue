@@ -1,31 +1,31 @@
 <template>
     <div class="register-container">
       <div class="register-box">
-         <div class="logo">
-           <img src="../assets/images/logoround.png">
-           <h1 class="greeting">用 户 注 册</h1>
-         </div>
+        <div class="logo">
+          <img src="../assets/images/logoround.png">
+          <h1 class="greeting">用 户 注 册</h1>
+        </div>
         <div class="register-dialog">
-         <el-form status-icon  ref="registerFormRef" :model="registerForm" :rules="registerFormRules">
-           <el-form-item prop="username">
-             <el-input prefix-icon="el-icon-user-solid" placeholder="用户名" v-model="registerForm.username" ></el-input>
-           </el-form-item>
-           <el-form-item prop="pass">
-             <el-input  prefix-icon="el-icon-lock"  placeholder="输入密码" v-model="registerForm.pass" type="password" autocomplete="off" show-password></el-input>
-           </el-form-item>
-           <el-form-item prop="checkPass">
-             <el-input prefix-icon="el-icon-key" placeholder="确认密码" v-model="registerForm.checkPass" type="password" autocomplete="off" show-password></el-input>
-           </el-form-item>
-           <el-form-item prop="phone">
-             <el-input prefix-icon="el-icon-phone" placeholder="电话" v-model="registerForm.phone"></el-input>
-           </el-form-item>
-           <el-form-item>
-             <el-button class="register-btn" type="primary" @click="submitRegisterInfo">立即注册</el-button>
+          <el-form status-icon  ref="registerFormRef" :model="registerForm" :rules="registerFormRules">
+            <el-form-item prop="username">
+              <el-input prefix-icon="el-icon-user-solid" placeholder="用户名" v-model="registerForm.username" ></el-input>
+            </el-form-item>
+            <el-form-item prop="pass">
+              <el-input  prefix-icon="el-icon-lock"  placeholder="输入密码" v-model="registerForm.pass" type="password" autocomplete="off" show-password></el-input>
+            </el-form-item>
+            <el-form-item prop="checkPass">
+              <el-input prefix-icon="el-icon-key" placeholder="确认密码" v-model="registerForm.checkPass" type="password" autocomplete="off" show-password></el-input>
+            </el-form-item>
+            <el-form-item prop="phone">
+              <el-input prefix-icon="el-icon-phone" placeholder="电话" v-model="registerForm.phone"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button class="register-btn" type="primary" @click="submitRegisterForm">立即注册</el-button>
             </el-form-item>
             <el-form-item>
               <router-link :to="{ name: 'login'}" ><el-button type="text">返回登录</el-button></router-link>
             </el-form-item>
-         </el-form>
+          </el-form>
         </div>
       </div>
     </div>
@@ -37,6 +37,8 @@ export default {
     var checkUsername = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('用户名不能为空'))
+      } else {
+        callback()
       }
     }
     var validatePass = (rule, value, callback) => {
@@ -44,7 +46,7 @@ export default {
         callback(new Error('请输入密码'))
       } else {
         if (this.registerForm.checkPass !== '') {
-          this.$refs.ruleForm.validateField('checkPass')
+          this.$refs.registerFormRef.validateField('checkPass')
         }
         callback()
       }
@@ -58,9 +60,21 @@ export default {
         callback()
       }
     }
-    var checkPhone = (rule, value, callback) => {
+    var checkPhone = async (rule, value, callback) => {
       if (!value) {
         return callback(new Error('电话不能为空'))
+      } else {
+        const { data: res } = await this.$http.get('/CheckMobile', {
+          params: {
+            mobile: value
+          }
+        })
+        // console.log(res)
+        if (res.account) {
+          return callback(new Error('该电话已被注册'))
+        } else {
+          callback()
+        }
       }
     }
     return {
@@ -83,22 +97,31 @@ export default {
         phone: [
           { validator: checkPhone, trigger: 'blur' }
         ]
-      }
+      },
+      accountFeedback: ''
     }
   },
   methods: {
-    submitRegisterInfo () {
+    submitRegisterForm () {
       this.$refs.registerFormRef.validate(async valid => {
         if (!valid) {
-          this.$message.error('请完善注册信息！')
+          this.$message.error('请核验注册信息！')
         } else {
           const { data: res } = await this.$http.post('UserCreate/', {
+            account: 'account',
             username: this.registerForm.username,
             password: this.registerForm.checkPass,
             mobile: this.registerForm.phone
           })
+          // console.log(res)
+          this.accountFeedback = res.account
+          // console.log(this.accountFeedback)
           this.$message.success('注册成功！')
-          return this.$router.push('/login')
+          return this.$router.push({
+            path: '/feedback',
+            name: 'feedback',
+            params: { account: this.accountFeedback }
+          })
         }
       })
     }

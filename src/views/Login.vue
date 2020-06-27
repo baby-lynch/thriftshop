@@ -8,12 +8,12 @@
       <div class="login-dialog">
         <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules">
           <!--用户名-->
-          <el-form-item prop="username">
-            <el-input prefix-icon="el-icon-user-solid" placeholder="用户名" v-model="loginForm.username"></el-input>
+          <el-form-item prop="account">
+            <el-input prefix-icon="el-icon-user-solid" placeholder="账 号" v-model="loginForm.account"></el-input>
           </el-form-item>
           <!--密码-->
           <el-form-item prop="password">
-            <el-input  prefix-icon="el-icon-lock" placeholder="密码" @keydown.enter.native="login" v-model="loginForm.password" show-password></el-input>
+            <el-input  prefix-icon="el-icon-lock" placeholder="密 码" @keydown.enter.native="login" v-model="loginForm.password" show-password></el-input>
           </el-form-item>
           <!--按钮-->
           <el-form-item>
@@ -34,15 +34,15 @@ export default {
   data () {
     return {
       loginForm: {
-        username: 'SWN',
+        account: '',
         password: ''
       },
       loginFormRules: {
-        username: [
-          { required: true, message: '输入用户名', trigger: 'blur' }
+        account: [
+          { required: true, message: '请输入账号', trigger: 'blur' }
         ],
         password: [
-          { required: true, message: '输入密码', trigger: 'blur' }
+          { required: true, message: '请输入密码', trigger: 'blur' }
         ]
       }
     }
@@ -62,21 +62,21 @@ export default {
       this.clearCookie()
       this.$refs.loginFormRef.validate(async valid => {
         if (!valid) {
-          this.$message.error('用户名或密码不能为空！')
+          this.$message.error('账号或密码不能为空！')
         } else {
           const { data: res } = await this.$http.get('/LoginInfo', {
             params: {
-              username: this.loginForm.username,
+              account: this.loginForm.account,
               password: this.loginForm.password
             }
           })
           console.log(res)
-          if (res.username === this.loginForm.username) {
+          if (res.account === this.loginForm.account) {
             document.cookie = res.username + '=' + res.id
             this.$message.success('登陆成功！')
             return this.$router.push('/shop')
           } else {
-            return this.$message.error('用户名或密码错误！')
+            return this.$message.error('账号或密码错误！')
           }
         }
       })

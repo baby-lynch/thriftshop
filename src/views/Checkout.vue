@@ -4,7 +4,7 @@
         <el-row class="el-row" :gutter="20">
         <el-col class="el-col" :span="8">
           <div class="logo">
-            <router-link :to="{ name: 'shop'}" >
+            <router-link :to="{ name: 'account'}" >
             <img src="../assets/images/logo.png">
             </router-link>
             </div>
@@ -13,7 +13,7 @@
         </el-col>
         <el-col class="el-col" :span="4">
           <div class="account">
-            <router-link :to="{ name: 'shop'}">
+            <router-link :to="{ name: 'account'}">
             <i class="el-icon-s-custom">
               <div style="display:inline-block; font-size:15px">个人中心</div>
             </i>
@@ -22,7 +22,6 @@
         </el-col>
         </el-row>
       </div>
-      <el-divider></el-divider>
       <el-card>
           <div class="success">
               <img src="../static/check.png">

@@ -13,7 +13,7 @@
         </el-col>
         <el-col class="el-col" :span="4">
           <div class="account">
-            <router-link :to="{ name: 'shop'}">
+            <router-link :to="{ name: 'account'}">
             <i class="el-icon-s-custom">
               <div style="display:inline-block; font-size:15px">个人中心</div>
             </i>
@@ -22,7 +22,6 @@
         </el-col>
         </el-row>
       </div>
-      <el-divider></el-divider>
       <el-card id='card'>
         <div class="image">
             <img :src="itemInfo.image" alt="..." style="width: 500px; height: 500px; border-radius:8px ; vertical-align: center;">
@@ -33,7 +32,7 @@
           <hr>
           <span style="font-family:'等线(中文正文)'">{{itemInfo.brief}}</span>
           <hr>
-            <span style="font-family:'等线(中文正文)'"><i style="font-size:20px" class="el-icon-user-solid"></i> {{itemInfo.seller.username}}</span>
+            <span v-if="itemInfo.seller" style="font-family:'等线(中文正文)'"><i style="font-size:20px" class="el-icon-user-solid"></i> {{itemInfo.seller.username}}</span>
             <span style="color:rgb(157,157,157); font-family:'等线(中文正文)'; float:right"> 浏览量 {{itemInfo.click}}</span>
             <br><br>
             <div style="margin-bottom:20px;">
@@ -43,12 +42,12 @@
             <div style="margin-bottom:20px;">
               <span style="color:rgb(102,102,102); font-family:'等线(中文正文)'">交易方式： </span>
               <span v-if="itemInfo.transaction === 0" style="font-size:15px;"><i class="el-icon-chat-dot-round"></i> 当面交易</span>
-              <span v-else style="font-size:15px;"><i class="el-icon-box"></i> 快递</span>
+              <span v-else style="font-size:15px;"><i class="el-icon-truck"></i> 快递</span>
             </div>
             <div>
               <span style="color:rgb(102,102,102); font-family:'等线(中文正文)'">运费： </span>
               <span> ￥{{itemInfo.postage}}</span>
-              </div>
+            </div>
             <router-link :to="{ name: 'purchase', query: {purchaseID :itemInfo.id} }" >
               <el-button type="warning" icon="el-icon-shopping-cart-2">立即购买</el-button>
             </router-link>
@@ -87,9 +86,6 @@ export default {
 </script>
 
 <style scoped>
-[v-cloak]{
-  display: none;
-}
 .item-container{
     margin:auto;
     height: 100%;
@@ -99,6 +95,7 @@ export default {
     width: 100%;
     height: 100px;
     margin-bottom: 10px;
+    white-space: nowrap;
 }
 .el-card{
   background-color: rgb(250, 250, 250);
@@ -125,14 +122,16 @@ export default {
   vertical-align: top;
 }
 .info-wrapper{
+  position: fixed;
   display: inline-block;
   margin: auto;
+  height: 65%;
   width: 450px;
   vertical-align: top;
 }
 .el-button{
-  position: fixed;
-  top:620px;
-  width: 450px;
+  position: absolute;
+  bottom: -10px;
+  width: 100%;
 }
 </style>

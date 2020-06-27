@@ -18,7 +18,7 @@
         </el-col>
         <el-col :span="4">
           <div class="account">
-            <router-link :to="{ name: 'shop'}">
+            <router-link :to="{ name: 'account'}">
             <i class="el-icon-s-custom">
               <div style="display:inline-block; font-size:15px">个人中心</div>
             </i>
@@ -90,8 +90,12 @@ export default {
   methods: {
     async getGoods () {
       const { data: res } = await this.$http.get('/GoodsByCategory')
-      this.goods = res
+      this.goods = res.filter(item => {
+        // console.log(item)
+        return item.amount > 0
+      })
       this.showGoods = this.goods
+      console.log(res)
     },
     handleClick () {
       const selectID = Number(this.activeCate)
@@ -130,6 +134,10 @@ export default {
     width: 100%;
     height: 100px;
     margin-bottom: 10px;
+    white-space: nowrap;
+}
+.el-tabs{
+  min-width: 1000px;
 }
 .el-row {
   margin-bottom: 20px;
@@ -168,6 +176,7 @@ export default {
   background-color:rgb(245,245,245);
   box-shadow: 1px 1px 3px #888888;
   text-align: center;
+  vertical-align: top;
 }
 .hover{
   box-shadow: 2px 2px 10px #888888;
